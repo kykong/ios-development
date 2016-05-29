@@ -52,6 +52,9 @@
                                                     <constraint firstAttribute="height" constant="44" id="zgf-3k-aR7"/>
                                                 </constraints>
                                                 <state key="normal" title="Compare"/>
+                                                <connections>
+                                                    <action selector="onCompare:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Dk9-fh-aBh"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Leg-ry-Zqw">
                                                 <rect key="frame" x="450" y="0.0" width="150" height="44"/>
@@ -104,6 +107,9 @@
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Drk-Kp-614">
                                     <rect key="frame" x="0.0" y="0.0" width="48" height="128"/>
                                     <state key="normal" title="Red"/>
+                                    <connections>
+                                        <action selector="onRedFilter:" destination="BYZ-38-t0r" eventType="touchUpInside" id="i5S-eQ-bj0"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="axt-GK-a6m">
                                     <rect key="frame" x="48" y="0.0" width="48" height="128"/>

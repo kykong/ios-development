@@ -14,11 +14,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var filteredImage: UIImage?
     
     @IBOutlet var imageView: UIImageView!
+    @IBOutlet weak var crossFadeImageView: UIImageView!
     
     @IBOutlet var secondaryMenu: UIView!
     @IBOutlet var bottomMenu: UIView!
     
     @IBOutlet var filterButton: UIButton!
+    @IBOutlet weak var compareButton: UIButton!
+    @IBOutlet weak var labelOverlay: UILabel!
+    
+    var showFiltered: Bool = false
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,6 +78,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             originalImage = image
             imageView.image = originalImage
+            filterSelected(false)
         }
     }
     
@@ -122,6 +129,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBAction func onRedFilter(sender: UIButton) {
         print("Red pressed")
         //hideSecondaryMenu()
+        filterSelected(true)
         
         var rgbaImage = RGBAImage(image: originalImage!)!
         
@@ -151,20 +159,62 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 rgbaImage.pixels[index] = pixel
             }
         }
-        
         filteredImage = rgbaImage.toUIImage()
-        imageView.image = filteredImage
+        //imageView.image = filteredImage
+        toggleImage(false)
     }
     
     
     @IBAction func onCompare(sender: UIButton) {
-        if (sender.selected) {
-            imageView.image = filteredImage
-        
-        } else {
-            imageView.image = originalImage
-        }
-        sender.selected = !sender.selected
+        toggleImage(showFiltered)
     }
+    
+    
+    func filterSelected(selected : Bool) {
+        compareButton.enabled = selected
+        showFiltered = selected
+        labelOverlay.hidden = selected
+    }
+    
+    func toggleImage(original: Bool) {
+        if (original) {
+            crossFadeImageView.image = filteredImage
+            crossFadeImageView.alpha = 1.0
+            
+            imageView.image = originalImage
+            //imageView.alpha = 0
+            showFiltered = false
+            
+        } else {
+            crossFadeImageView.image = originalImage
+            crossFadeImageView.alpha = 1.0
+            
+            imageView.image = filteredImage
+            //imageView.alpha = 0
+            showFiltered = true
+        }
+        UIView.animateWithDuration(0.4, animations: {
+            self.crossFadeImageView.alpha = 0
+            //self.imageView.alpha = 1
+        })
+        
+        labelOverlay.hidden = showFiltered
+        
+    }
+    
+
+
+    
+    @IBAction func handleLongPress(sender: UILongPressGestureRecognizer) {
+        if (!compareButton.enabled) { return }
+        
+        if sender.state == .Began {
+            toggleImage(showFiltered)
+            
+        } else if sender.state == .Ended {
+            toggleImage(showFiltered)
+        }
+    }
+    
 }
 

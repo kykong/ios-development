@@ -33,7 +33,7 @@ public class ColourIntensityFilter : FilterType {
     
     let filterColour: Colour
     let DEFAULT_INTENSITY: Double = 4.0
-    public var intensityMinMax = [0.0, 10.0]
+    public var intensityMinMax = [0.0, 5.0]
     
     public enum Colour {
         case Red, Green, Blue
@@ -84,7 +84,7 @@ public class ColourIntensityFilter : FilterType {
                 
                 let colourDelta = pixelCol - avgColour
                 
-                var modifier = 1 + intensity
+                var modifier = intensity
                 //var modifier = 1 + 4 * (Double(y) / Double(rgbaImage.height))
                 //var modifier = 1 + 4 * (1-(Double(y) / Double(rgbaImage.height)))
                 if (pixelCol < avgColour) {
@@ -140,13 +140,13 @@ public class SepiaFilter : FilterType {
                 var pixel = rgbaImage.pixels[index]
                 
                 
-                var outputRed = (intensity * (Double(pixel.red) * 0.393) + (Double(pixel.green) * 0.769) + (Double(pixel.blue) * 0.189)) + ((1-intensity) * Double(pixel.red))
+                var outputRed = (intensity * ((Double(pixel.red) * 0.393) + (Double(pixel.green) * 0.769) + (Double(pixel.blue) * 0.189))) + ((1-intensity) * Double(pixel.red))
                 outputRed = clamp(0.0, maxVal: 255.0, value: outputRed)
                 
-                var outputGreen = (intensity * (Double(pixel.red) * 0.349) + (Double(pixel.green) * 0.686) + (Double(pixel.blue) * 0.168)) + ((1-intensity) * Double(pixel.green))
+                var outputGreen = (intensity * ((Double(pixel.red) * 0.349) + (Double(pixel.green) * 0.686) + (Double(pixel.blue) * 0.168))) + ((1-intensity) * Double(pixel.green))
                 outputGreen = clamp(0.0, maxVal: 255.0, value: outputGreen)
                 
-                var outputBlue = (intensity * (Double(pixel.red) * 0.272) + (Double(pixel.green) * 0.534) + (Double(pixel.blue) * 0.131)) + ((1-intensity) * Double(pixel.blue))
+                var outputBlue = (intensity * ((Double(pixel.red) * 0.272) + (Double(pixel.green) * 0.534) + (Double(pixel.blue) * 0.131))) + ((1-intensity) * Double(pixel.blue))
                 outputBlue = clamp(0.0, maxVal: 255.0, value: outputBlue)
                 
                 

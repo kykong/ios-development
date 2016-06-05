@@ -267,7 +267,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         editButton.enabled = selected
         showFiltered = selected
         labelOverlay.hidden = selected
-        if (!selected) { resetAllFilters() }
+        if (!selected) {
+            resetAllFilters()
+            hideSlider()
+        }
     }
     
     func toggleImage(original: Bool) {

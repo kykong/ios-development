@@ -21,6 +21,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet var bottomMenu: UIView!
     
     @IBOutlet var filterButton: UIButton!
+    @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var compareButton: UIButton!
     @IBOutlet weak var labelOverlay: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -183,7 +184,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func applyFilter(filter: FilterType) {
         activityIndicator.startAnimating()
-        filterSelected(true)
         let rgbaImage = RGBAImage(image: originalImage!)!
         
         let queue = NSOperationQueue()
@@ -191,8 +191,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.filteredImage = filter.applyFilter(rgbaImage).toUIImage()
             
             NSOperationQueue.mainQueue().addOperationWithBlock() {
-                self.toggleImage(false)
                 self.activityIndicator.stopAnimating()
+                self.toggleImage(false)
+                self.filterSelected(true)
             }
         }
         
@@ -203,6 +204,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func filterSelected(selected : Bool) {
         compareButton.enabled = selected
+        editButton.enabled = selected
         showFiltered = selected
         labelOverlay.hidden = selected
         if (!selected) { resetAllFilters() }

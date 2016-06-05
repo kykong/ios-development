@@ -242,6 +242,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     
     func applyFilter(filter: FilterType) {
+        imageView.userInteractionEnabled = false
         activityIndicator.startAnimating()
         currentFilter = filter
         let rgbaImage = RGBAImage(image: originalImage!)!
@@ -254,6 +255,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 self.activityIndicator.stopAnimating()
                 self.toggleImage(false)
                 self.filterSelected(true)
+                self.imageView.userInteractionEnabled = true
             }
         }
         

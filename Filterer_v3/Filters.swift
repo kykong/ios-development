@@ -135,9 +135,15 @@ public class SepiaFilter : FilterType {
                 var pixel = rgbaImage.pixels[index]
                 
                 
-                let outputRed =   clamp(0, maxVal: 255, value: Int(intensity * (Double(pixel.red) * 0.393) + (Double(pixel.green) * 0.769) + (Double(pixel.blue) * 0.189) + (1-intensity) * Double(pixel.red)  ))
-                let outputGreen = clamp(0, maxVal: 255, value: Int(intensity * (Double(pixel.red) * 0.349) + (Double(pixel.green) * 0.686) + (Double(pixel.blue) * 0.168) + (1-intensity) * Double(pixel.green)))
-                let outputBlue =  clamp(0, maxVal: 255, value: Int(intensity * (Double(pixel.red) * 0.272) + (Double(pixel.green)  * 0.534) + (Double(pixel.blue) * 0.131) + (1-intensity) * Double(pixel.blue) ))
+                var outputRed = (intensity * (Double(pixel.red) * 0.393) + (Double(pixel.green) * 0.769) + (Double(pixel.blue) * 0.189)) + ((1-intensity) * Double(pixel.red))
+                outputRed = clamp(0.0, maxVal: 255.0, value: outputRed)
+                
+                var outputGreen = (intensity * (Double(pixel.red) * 0.349) + (Double(pixel.green) * 0.686) + (Double(pixel.blue) * 0.168)) + ((1-intensity) * Double(pixel.green))
+                outputGreen = clamp(0.0, maxVal: 255.0, value: outputGreen)
+                
+                var outputBlue = (intensity * (Double(pixel.red) * 0.272) + (Double(pixel.green) * 0.534) + (Double(pixel.blue) * 0.131)) + ((1-intensity) * Double(pixel.blue))
+                outputBlue = clamp(0.0, maxVal: 255.0, value: outputBlue)
+                
                 
                 pixel.red   = UInt8(outputRed)
                 pixel.green = UInt8(outputGreen)
@@ -177,7 +183,7 @@ public class ContrastFilter : FilterType {
         }
         
         
-        let factor = 259.0 * (intensity + 255.0) / 255 * (259 - intensity)
+        let factor = 259.0 * (intensity + 255.0) / (255 * (259 - intensity))
         
         var rgbaImage = image
         for y in 0..<rgbaImage.height {

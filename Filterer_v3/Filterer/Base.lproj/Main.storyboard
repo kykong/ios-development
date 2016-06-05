@@ -66,6 +66,9 @@
                                                     <constraint firstAttribute="height" constant="44" id="fPb-gq-W4a"/>
                                                 </constraints>
                                                 <state key="normal" title="Edit"/>
+                                                <connections>
+                                                    <action selector="onEdit:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gzQ-Id-Gd3"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tPg-2N-f93">
                                                 <rect key="frame" x="360" y="0.0" width="120" height="44"/>
@@ -132,6 +135,8 @@
                         <outlet property="imageView" destination="aND-Em-4Dd" id="vbi-rB-DhQ"/>
                         <outlet property="labelOverlay" destination="YFE-is-4pW" id="tfa-5l-by4"/>
                         <outlet property="secondaryMenu" destination="ePS-oG-ZHP" id="Be7-JW-Iwe"/>
+                        <outlet property="slider" destination="jTm-eo-fta" id="wZv-dm-qQN"/>
+                        <outlet property="sliderPanel" destination="ZoJ-wa-anO" id="Vph-Sb-HaC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -142,35 +147,35 @@
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="n3M-NR-6VP">
                             <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Drk-Kp-614">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Drk-Kp-614">
                                     <rect key="frame" x="0.0" y="0.0" width="45" height="128"/>
                                     <state key="normal" title="Red" image="red_filter"/>
                                     <connections>
                                         <action selector="onRedFilter:" destination="BYZ-38-t0r" eventType="touchUpInside" id="i5S-eQ-bj0"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="axt-GK-a6m">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="axt-GK-a6m">
                                     <rect key="frame" x="49" y="0.0" width="45" height="128"/>
                                     <state key="normal" title="Green" image="green_filter"/>
                                     <connections>
                                         <action selector="onGreenFilter:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6Nw-sq-p0p"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sNq-be-bSy">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sNq-be-bSy">
                                     <rect key="frame" x="98" y="0.0" width="44" height="128"/>
                                     <state key="normal" title="Blue" image="blue_filter"/>
                                     <connections>
                                         <action selector="onBlueFilter:" destination="BYZ-38-t0r" eventType="touchUpInside" id="PLU-HE-f69"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zUq-ef-bpc">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zUq-ef-bpc">
                                     <rect key="frame" x="146" y="0.0" width="45" height="128"/>
                                     <state key="normal" title="Sepia" image="sepia_filter"/>
                                     <connections>
                                         <action selector="onSepiaFilter:" destination="BYZ-38-t0r" eventType="touchUpInside" id="way-KS-LmZ"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7P8-VM-YCw">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7P8-VM-YCw">
                                     <rect key="frame" x="195" y="0.0" width="45" height="128"/>
                                     <state key="normal" title="Contrast" image="contrast_filter"/>
                                     <connections>
@@ -193,6 +198,21 @@
                         <action selector="handleLongPress:" destination="BYZ-38-t0r" id="qW7-cc-05X"/>
                     </connections>
                 </pongPressGestureRecognizer>
+                <view contentMode="scaleToFill" id="ZoJ-wa-anO" userLabel="Slider Panel">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sNK-mD-zwD">
+                            <rect key="frame" x="20" y="9" width="222" height="30"/>
+                            <subviews>
+                                <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jTm-eo-fta">
+                                    <rect key="frame" x="-2" y="0.0" width="226" height="31"/>
+                                </slider>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
             </objects>
             <point key="canvasLocation" x="388" y="329"/>
         </scene>

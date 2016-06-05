@@ -18,6 +18,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var crossFadeImageView: UIImageView!
     
     @IBOutlet var secondaryMenu: UIView!
+    @IBOutlet var sliderPanel: UIView!
     @IBOutlet var bottomMenu: UIView!
     
     @IBOutlet var filterButton: UIButton!
@@ -25,6 +26,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var compareButton: UIButton!
     @IBOutlet weak var labelOverlay: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet var slider: UISlider!
     
     var showFiltered: Bool = false
     
@@ -42,6 +44,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         super.viewDidLoad()
         secondaryMenu.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
         secondaryMenu.translatesAutoresizingMaskIntoConstraints = false
+        sliderPanel.translatesAutoresizingMaskIntoConstraints = false
         originalImage = imageView.image
         setupFilters()
     }
@@ -113,14 +116,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBAction func onFilter(sender: UIButton) {
         if (sender.selected) {
             hideSecondaryMenu()
-            sender.selected = false
+            //sender.selected = false
         } else {
             showSecondaryMenu()
-            sender.selected = true
+            //sender.selected = true
         }
     }
     
     func showSecondaryMenu() {
+        if editButton.selected { hideSlider() }
+        filterButton.selected = true
+
         view.addSubview(secondaryMenu)
         
         let bottomConstraint = secondaryMenu.bottomAnchor.constraintEqualToAnchor(bottomMenu.topAnchor)
@@ -140,6 +146,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 
     func hideSecondaryMenu() {
+        filterButton.selected = false
         UIView.animateWithDuration(0.4, animations: {
             self.secondaryMenu.alpha = 0
             }) { completed in
@@ -148,6 +155,43 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 }
         }
     }
+    
+    
+    func showSlider() {
+        if (filterButton.selected) { hideSecondaryMenu() }
+        editButton.selected = true
+        slider.minimumValue = 0.0
+        slider.maximumValue = 1.0
+        slider.value = 0.5
+        
+        view.addSubview(sliderPanel)
+        let bottomConstraint = sliderPanel.bottomAnchor.constraintEqualToAnchor(bottomMenu.topAnchor)
+        let leftConstraint = sliderPanel.leftAnchor.constraintEqualToAnchor(view.leftAnchor)
+        let rightConstraint = sliderPanel.rightAnchor.constraintEqualToAnchor(view.rightAnchor)
+        let heightConstraint = sliderPanel.heightAnchor.constraintEqualToConstant(44)
+        
+        NSLayoutConstraint.activateConstraints([bottomConstraint, leftConstraint, rightConstraint, heightConstraint])
+        
+        view.layoutIfNeeded()
+        
+        self.sliderPanel.alpha = 0
+        UIView.animateWithDuration(0.4) {
+            self.sliderPanel.alpha = 1.0
+        }
+        
+    }
+    
+    func hideSlider() {
+        editButton.selected = false
+        UIView.animateWithDuration(0.4, animations: {
+            self.sliderPanel.alpha = 0
+            }) { completed in
+                if completed == true {
+                    self.sliderPanel.removeFromSuperview()
+                }
+        }
+    }
+    
     
     
     func displayImage(img: UIImage) {
@@ -176,6 +220,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         applyFilter(contrastFilter!)
     }
 
+    @IBAction func onEdit(sender: UIButton) {
+        if sender.selected {
+            hideSlider()
+            
+        } else {
+            showSlider()
+        }
+    }
     
     @IBAction func onCompare(sender: UIButton) {
         toggleImage(showFiltered)

@@ -22,8 +22,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet var filterButton: UIButton!
     @IBOutlet weak var compareButton: UIButton!
     @IBOutlet weak var labelOverlay: UILabel!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var showFiltered: Bool = false
+    
+    
+    // Filters
+    var redFilter: FilterType? = nil
+    var greenFilter: FilterType? = nil
+    var blueFilter: FilterType? = nil
+    
     
     
     override func viewDidLoad() {
@@ -31,8 +39,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         secondaryMenu.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
         secondaryMenu.translatesAutoresizingMaskIntoConstraints = false
         originalImage = imageView.image
+        setupFilters()
     }
 
+    
+    func setupFilters() {
+        redFilter = ColourIntensityFilter(colour: .Red)
+        greenFilter = ColourIntensityFilter(colour: .Green)
+        blueFilter = ColourIntensityFilter(colour: .Blue)
+        
+    }
+    
     // MARK: Share
     @IBAction func onShare(sender: AnyObject) {
         let activityController = UIActivityViewController(activityItems: ["Check out our really cool app", imageView.image!], applicationActivities: nil)
@@ -127,53 +144,47 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 
     @IBAction func onRedFilter(sender: UIButton) {
-        print("Red pressed")
-        //hideSecondaryMenu()
-        filterSelected(true)
-        
-        var rgbaImage = RGBAImage(image: originalImage!)!
-        
-        let pixelCount = rgbaImage.width * rgbaImage.height
-        
-        var redTotal = 0
-        
-        for y in 0..<rgbaImage.height {
-            for x in 0..<rgbaImage.width {
-                redTotal += (Int)(rgbaImage.pixels[y * rgbaImage.width + x].red)
-            }
-        }
-        let avgRed = redTotal / pixelCount
-        
-        for y in 0..<rgbaImage.height {
-            for x in 0..<rgbaImage.width {
-                let index = y * rgbaImage.width + x
-                var pixel = rgbaImage.pixels[index]
-                let redDelta = Int(pixel.red) - avgRed
-                
-                var modifier = 1 + 4 * (Double(y) / Double(rgbaImage.height))
-                if (Int(pixel.red) < avgRed) {
-                    modifier = 1
-                }
-                
-                pixel.red = UInt8(max(min(255, Int(round(Double(avgRed) + modifier * Double(redDelta)))), 0))
-                rgbaImage.pixels[index] = pixel
-            }
-        }
-        filteredImage = rgbaImage.toUIImage()
-        //imageView.image = filteredImage
-        toggleImage(false)
+        applyFilter(redFilter!)
     }
     
+    @IBAction func onGreenFilter(sender: UIButton) {
+        applyFilter(greenFilter!)
+    }
+    
+    @IBAction func onBlueFilter(sender: UIButton) {
+        applyFilter(blueFilter!)
+    }
     
     @IBAction func onCompare(sender: UIButton) {
         toggleImage(showFiltered)
     }
     
     
+    func applyFilter(filter: FilterType) {
+        activityIndicator.startAnimating()
+        filterSelected(true)
+        let rgbaImage = RGBAImage(image: originalImage!)!
+        
+        let queue = NSOperationQueue()
+        queue.addOperationWithBlock() {
+            self.filteredImage = filter.applyFilter(rgbaImage).toUIImage()
+            
+            NSOperationQueue.mainQueue().addOperationWithBlock() {
+                self.toggleImage(false)
+                self.activityIndicator.stopAnimating()
+            }
+        }
+        
+    }
+    
+    
+    
+    
     func filterSelected(selected : Bool) {
         compareButton.enabled = selected
         showFiltered = selected
         labelOverlay.hidden = selected
+        if (!selected) { resetAllFilters() }
     }
     
     func toggleImage(original: Bool) {
@@ -200,6 +211,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         labelOverlay.hidden = showFiltered
         
+    }
+    
+    func resetAllFilters() {
+        redFilter?.reset()
+        greenFilter?.reset()
+        blueFilter?.reset()
     }
     
 

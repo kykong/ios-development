@@ -157,11 +157,17 @@
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zUq-ef-bpc">
                                     <rect key="frame" x="144" y="0.0" width="48" height="128"/>
-                                    <state key="normal" title="Yellow"/>
+                                    <state key="normal" title="Sepia"/>
+                                    <connections>
+                                        <action selector="onSepiaFilter:" destination="BYZ-38-t0r" eventType="touchUpInside" id="way-KS-LmZ"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7P8-VM-YCw">
                                     <rect key="frame" x="192" y="0.0" width="48" height="128"/>
-                                    <state key="normal" title="Purple"/>
+                                    <state key="normal" title="Contrast"/>
+                                    <connections>
+                                        <action selector="onContrastFilter:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1lC-Hg-MHY"/>
+                                    </connections>
                                 </button>
                             </subviews>
                         </stackView>

@@ -15,12 +15,18 @@ public protocol FilterType: class {
     func reset()
 }
 
+public func clamp(minVal: Int, maxVal: Int, value: Int) -> Int {
+    return max(min(maxVal, value), minVal)
+}
+
+public func clamp(minVal: Double, maxVal: Double, value: Double) -> Double {
+    return max(min(maxVal, value), minVal)
+}
 
 
 public class ColourIntensityFilter : FilterType {
     
-    //var originalImage: RGBAImage?
-    var intensity: Double
+    var intensity: Double    // any number >= 0
     var filteredImage: RGBAImage?
     
     let filterColour: Colour
@@ -82,10 +88,11 @@ public class ColourIntensityFilter : FilterType {
                     modifier = 1
                 }
                 
+                let newValue = UInt8(clamp(0, maxVal: 255, value: Int(round(Double(avgColour) + modifier * Double(colourDelta)))))
                 switch filterColour {
-                    case .Red:    pixel.red   = UInt8(max(min(255, Int(round(Double(avgColour) + modifier * Double(colourDelta)))), 0))
-                    case .Green:  pixel.green = UInt8(max(min(255, Int(round(Double(avgColour) + modifier * Double(colourDelta)))), 0))
-                    case .Blue:   pixel.blue  = UInt8(max(min(255, Int(round(Double(avgColour) + modifier * Double(colourDelta)))), 0))
+                    case .Red:    pixel.red   = newValue
+                    case .Green:  pixel.green = newValue
+                    case .Blue:   pixel.blue  = newValue
                 }
                 rgbaImage.pixels[index] = pixel
             }
@@ -96,7 +103,7 @@ public class ColourIntensityFilter : FilterType {
     
     public func setIntensity(intensity : Double) {
         reset()
-        self.intensity = intensity
+        self.intensity = clamp(1.0, maxVal: intensity, value: intensity)
     }
     
     public func reset() {
@@ -104,3 +111,104 @@ public class ColourIntensityFilter : FilterType {
         filteredImage = nil
     }
 }
+
+
+public class SepiaFilter : FilterType {
+    var intensity: Double   // from 0 to 1
+    var filteredImage: RGBAImage?
+    
+    let DEFAULT_INTENSITY: Double = 1.0
+    
+    init() {
+        self.intensity = DEFAULT_INTENSITY
+    }
+    
+    public func applyFilter(image: RGBAImage)-> RGBAImage {
+        if let img = filteredImage {
+            return img
+        }
+        
+        var rgbaImage = image
+        for y in 0..<rgbaImage.height {
+            for x in 0..<rgbaImage.width {
+                let index = y * rgbaImage.width + x
+                var pixel = rgbaImage.pixels[index]
+                
+                
+                let outputRed =   clamp(0, maxVal: 255, value: Int(intensity * (Double(pixel.red) * 0.393) + (Double(pixel.green) * 0.769) + (Double(pixel.blue) * 0.189) + (1-intensity) * Double(pixel.red)  ))
+                let outputGreen = clamp(0, maxVal: 255, value: Int(intensity * (Double(pixel.red) * 0.349) + (Double(pixel.green) * 0.686) + (Double(pixel.blue) * 0.168) + (1-intensity) * Double(pixel.green)))
+                let outputBlue =  clamp(0, maxVal: 255, value: Int(intensity * (Double(pixel.red) * 0.272) + (Double(pixel.green)  * 0.534) + (Double(pixel.blue) * 0.131) + (1-intensity) * Double(pixel.blue) ))
+                
+                pixel.red   = UInt8(outputRed)
+                pixel.green = UInt8(outputGreen)
+                pixel.blue  = UInt8(outputBlue)
+                rgbaImage.pixels[index] = pixel
+            }
+        }
+        filteredImage = rgbaImage
+        return filteredImage!
+    }
+    
+    public func setIntensity(intensity : Double) {
+        reset()
+        self.intensity = clamp(0.0, maxVal: 1.0, value: intensity)
+    }
+    
+    public func reset() {
+        self.intensity = DEFAULT_INTENSITY
+        filteredImage = nil
+    }
+}
+
+
+public class ContrastFilter : FilterType {
+    var intensity: Double   // from -255 to 255
+    var filteredImage: RGBAImage?
+    
+    let DEFAULT_INTENSITY: Double = 64.0
+    
+    init() {
+        self.intensity = DEFAULT_INTENSITY
+    }
+    
+    public func applyFilter(image: RGBAImage)-> RGBAImage {
+        if let img = filteredImage {
+            return img
+        }
+        
+        
+        let factor = 259.0 * (intensity + 255.0) / 255 * (259 - intensity)
+        
+        var rgbaImage = image
+        for y in 0..<rgbaImage.height {
+            for x in 0..<rgbaImage.width {
+                let index = y * rgbaImage.width + x
+                var pixel = rgbaImage.pixels[index]
+                
+                let outputRed   = clamp(0, maxVal: 255, value: Int(factor * (Double(pixel.red) - 128) + 128))
+                let outputGreen = clamp(0, maxVal: 255, value: Int(factor * (Double(pixel.green) - 128) + 128))
+                let outputBlue  = clamp(0, maxVal: 255, value: Int(factor * (Double(pixel.blue) - 128) + 128))
+                
+                pixel.red   = UInt8(outputRed)
+                pixel.green = UInt8(outputGreen)
+                pixel.blue  = UInt8(outputBlue)
+                rgbaImage.pixels[index] = pixel
+            }
+        }
+        filteredImage = rgbaImage
+        return filteredImage!
+    }
+    
+    public func setIntensity(intensity : Double) {
+        reset()
+        self.intensity = clamp(-255.0, maxVal: 255.0, value: intensity)
+    }
+    
+    public func reset() {
+        self.intensity = DEFAULT_INTENSITY
+        filteredImage = nil
+    }
+}
+
+
+

@@ -12,6 +12,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     var originalImage: UIImage?
     var filteredImage: UIImage?
+    var currentImage: UIImage?
     
     @IBOutlet var imageView: UIImageView!
     @IBOutlet weak var crossFadeImageView: UIImageView!
@@ -31,6 +32,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var redFilter: FilterType? = nil
     var greenFilter: FilterType? = nil
     var blueFilter: FilterType? = nil
+    var sepiaFilter: FilterType? = nil
+    var contrastFilter: FilterType? = nil
     
     
     
@@ -47,7 +50,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         redFilter = ColourIntensityFilter(colour: .Red)
         greenFilter = ColourIntensityFilter(colour: .Green)
         blueFilter = ColourIntensityFilter(colour: .Blue)
-        
+        sepiaFilter = SepiaFilter()
+        contrastFilter = ContrastFilter()
     }
     
     // MARK: Share
@@ -94,7 +98,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         dismissViewControllerAnimated(true, completion: nil)
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             originalImage = image
-            imageView.image = originalImage
+            //imageView.image = originalImage
+            displayImage(originalImage!)
             filterSelected(false)
         }
     }
@@ -142,6 +147,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 }
         }
     }
+    
+    
+    func displayImage(img: UIImage) {
+        imageView.image = img
+        currentImage = img
+    }
+    
 
     @IBAction func onRedFilter(sender: UIButton) {
         applyFilter(redFilter!)
@@ -154,6 +166,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBAction func onBlueFilter(sender: UIButton) {
         applyFilter(blueFilter!)
     }
+    
+    @IBAction func onSepiaFilter(sender: UIButton) {
+        applyFilter(sepiaFilter!)
+    }
+    
+    @IBAction func onContrastFilter(sender: UIButton) {
+        applyFilter(contrastFilter!)
+    }
+
     
     @IBAction func onCompare(sender: UIButton) {
         toggleImage(showFiltered)
@@ -189,19 +210,23 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func toggleImage(original: Bool) {
         if (original) {
-            crossFadeImageView.image = filteredImage
+            //crossFadeImageView.image = filteredImage
+            crossFadeImageView.image = currentImage
             crossFadeImageView.alpha = 1.0
             
-            imageView.image = originalImage
+            //imageView.image = originalImage
             //imageView.alpha = 0
+            displayImage(originalImage!)
             showFiltered = false
             
         } else {
-            crossFadeImageView.image = originalImage
+            //crossFadeImageView.image = originalImage
+            crossFadeImageView.image = currentImage
             crossFadeImageView.alpha = 1.0
             
-            imageView.image = filteredImage
+            //imageView.image = filteredImage
             //imageView.alpha = 0
+            displayImage(filteredImage!)
             showFiltered = true
         }
         UIView.animateWithDuration(0.4, animations: {
@@ -217,6 +242,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         redFilter?.reset()
         greenFilter?.reset()
         blueFilter?.reset()
+        sepiaFilter?.reset()
+        contrastFilter?.reset()
     }
     
 

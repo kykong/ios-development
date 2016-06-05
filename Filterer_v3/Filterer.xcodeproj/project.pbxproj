@@ -13,6 +13,7 @@
 		4DC1999F1BB201E100AA75E7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4DC1999E1BB201E100AA75E7 /* Assets.xcassets */; };
 		4DC199A21BB201E100AA75E7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4DC199A01BB201E100AA75E7 /* LaunchScreen.storyboard */; };
 		4DC199AA1BB2049F00AA75E7 /* RGBAImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC199A91BB2049F00AA75E7 /* RGBAImage.swift */; };
+		FA55C9191D04352600EF7F9E /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA55C9181D04352600EF7F9E /* Filters.swift */; };
 		FAFD5AF21D03D19100521F08 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAFD5AF11D03D19100521F08 /* Filters.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +26,7 @@
 		4DC199A11BB201E100AA75E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4DC199A31BB201E100AA75E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4DC199A91BB2049F00AA75E7 /* RGBAImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RGBAImage.swift; sourceTree = "<group>"; };
+		FA55C9181D04352600EF7F9E /* Filters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		FAFD5AF11D03D19100521F08 /* Filters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Filters.swift; path = ../Filters.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,6 +60,7 @@
 		4DC199961BB201E100AA75E7 /* Filterer */ = {
 			isa = PBXGroup;
 			children = (
+				FA55C9181D04352600EF7F9E /* Filters.swift */,
 				FAFD5AF11D03D19100521F08 /* Filters.swift */,
 				4DC199971BB201E100AA75E7 /* AppDelegate.swift */,
 				4DC199991BB201E100AA75E7 /* ViewController.swift */,
@@ -141,6 +144,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4DC1999A1BB201E100AA75E7 /* ViewController.swift in Sources */,
+				FA55C9191D04352600EF7F9E /* Filters.swift in Sources */,
 				FAFD5AF21D03D19100521F08 /* Filters.swift in Sources */,
 				4DC199AA1BB2049F00AA75E7 /* RGBAImage.swift in Sources */,
 				4DC199981BB201E100AA75E7 /* AppDelegate.swift in Sources */,

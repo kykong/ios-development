@@ -10,9 +10,6 @@ import UIKit
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    var originalImage: UIImage?
-    var filteredImage: UIImage?
-    var currentImage: UIImage?
     
     @IBOutlet var imageView: UIImageView!
     @IBOutlet weak var crossFadeImageView: UIImageView!
@@ -28,6 +25,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet var slider: UISlider!
     
+    var originalImage: UIImage?
+    var filteredImage: UIImage?
+    var currentImage: UIImage?
     var showFiltered: Bool = false
     var currentFilter: FilterType?
     
@@ -38,6 +38,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var blueFilter: FilterType? = nil
     var sepiaFilter: FilterType? = nil
     var contrastFilter: FilterType? = nil
+    var lumiGreyFilter: FilterType? = nil
     
     
     
@@ -57,6 +58,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         blueFilter = ColourIntensityFilter(colour: .Blue)
         sepiaFilter = SepiaFilter()
         contrastFilter = ContrastFilter()
+        lumiGreyFilter = LuminosityGreyscaleFilter()
     }
     
     // MARK: Share
@@ -103,7 +105,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         dismissViewControllerAnimated(true, completion: nil)
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             originalImage = image
-            //imageView.image = originalImage
             displayImage(originalImage!)
             filterSelected(false)
         }
@@ -117,10 +118,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBAction func onFilter(sender: UIButton) {
         if (sender.selected) {
             hideSecondaryMenu()
-            //sender.selected = false
+
         } else {
             showSecondaryMenu()
-            //sender.selected = true
         }
     }
     
@@ -224,7 +224,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     @IBAction func onContrastFilter(sender: UIButton) {
-        applyFilter(contrastFilter!)
+        //applyFilter(contrastFilter!)
+        applyFilter(lumiGreyFilter!)
     }
 
     @IBAction func onEdit(sender: UIButton) {
@@ -277,28 +278,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func toggleImage(original: Bool) {
         if (original) {
-            //crossFadeImageView.image = filteredImage
             crossFadeImageView.image = currentImage
             crossFadeImageView.alpha = 1.0
-            
-            //imageView.image = originalImage
-            //imageView.alpha = 0
             displayImage(originalImage!)
             showFiltered = false
             
         } else {
-            //crossFadeImageView.image = originalImage
             crossFadeImageView.image = currentImage
             crossFadeImageView.alpha = 1.0
-            
-            //imageView.image = filteredImage
-            //imageView.alpha = 0
             displayImage(filteredImage!)
             showFiltered = true
         }
         UIView.animateWithDuration(0.4, animations: {
             self.crossFadeImageView.alpha = 0
-            //self.imageView.alpha = 1
         })
         
         labelOverlay.hidden = showFiltered

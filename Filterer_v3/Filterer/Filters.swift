@@ -26,6 +26,7 @@ public func clamp(minVal: Double, maxVal: Double, value: Double) -> Double {
 }
 
 
+
 public class ColourIntensityFilter : FilterType {
     
     public var intensity: Double    // any number >= 0
@@ -223,5 +224,60 @@ public class ContrastFilter : FilterType {
     }
 }
 
+
+public class LuminosityGreyscaleFilter : FilterType {
+    public var intensity: Double
+    public var intensityMinMax = [0.0, 1.0]
+    
+    var filteredImage: RGBAImage?
+    
+    let DEFAULT_INTENSITY: Double = 1.0
+    
+    init() {
+        self.intensity = DEFAULT_INTENSITY
+    }
+    
+    public func applyFilter(image: RGBAImage)-> RGBAImage {
+        if let img = filteredImage {
+            return img
+        }
+        
+        
+        var rgbaImage = image
+        for y in 0..<rgbaImage.height {
+            for x in 0..<rgbaImage.width {
+                let index = y * rgbaImage.width + x
+                var pixel = rgbaImage.pixels[index]
+                
+                let outputGrey = ((Double(pixel.red) * 0.21) + (Double(pixel.green) * 0.72) + (Double(pixel.blue) * 0.07))
+                var outputRed = (intensity * outputGrey) + ((1 - intensity) * Double(pixel.red))
+                outputRed = clamp(0, maxVal: 255, value: outputRed)
+                var outputGreen = (intensity * outputGrey) + ((1 - intensity) * Double(pixel.green))
+                outputGreen = clamp(0, maxVal: 255, value: outputGreen)
+                var outputBlue = (intensity * outputGrey) + ((1 - intensity) * Double(pixel.blue))
+                outputBlue = clamp(0, maxVal: 255, value: outputBlue)
+                
+                
+                
+                pixel.red   = UInt8(outputRed)
+                pixel.green = UInt8(outputGreen)
+                pixel.blue  = UInt8(outputBlue)
+                rgbaImage.pixels[index] = pixel
+            }
+        }
+        filteredImage = rgbaImage
+        return filteredImage!
+    }
+    
+    public func setIntensity(intensity : Double) {
+        reset()
+        self.intensity = clamp(intensityMinMax[0], maxVal: intensityMinMax[1], value: intensity)
+    }
+    
+    public func reset() {
+        self.intensity = DEFAULT_INTENSITY
+        filteredImage = nil
+    }
+}
 
 

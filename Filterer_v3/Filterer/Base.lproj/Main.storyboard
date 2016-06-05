@@ -198,20 +198,23 @@
                         <action selector="handleLongPress:" destination="BYZ-38-t0r" id="qW7-cc-05X"/>
                     </connections>
                 </pongPressGestureRecognizer>
-                <view contentMode="scaleToFill" id="ZoJ-wa-anO" userLabel="Slider Panel">
+                <view contentMode="scaleAspectFill" id="ZoJ-wa-anO" userLabel="Slider Panel">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sNK-mD-zwD">
-                            <rect key="frame" x="20" y="9" width="222" height="30"/>
-                            <subviews>
-                                <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jTm-eo-fta">
-                                    <rect key="frame" x="-2" y="0.0" width="226" height="31"/>
-                                </slider>
-                            </subviews>
-                        </stackView>
+                        <slider opaque="NO" contentMode="center" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jTm-eo-fta">
+                            <rect key="frame" x="-9" y="49" width="258" height="125"/>
+                            <connections>
+                                <action selector="sliderValueUpdated:" destination="BYZ-38-t0r" eventType="valueChanged" id="JIW-zj-KDh"/>
+                            </connections>
+                        </slider>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="jTm-eo-fta" firstAttribute="top" secondItem="ZoJ-wa-anO" secondAttribute="top" constant="2" id="0gI-9t-fCP"/>
+                        <constraint firstItem="jTm-eo-fta" firstAttribute="leading" secondItem="ZoJ-wa-anO" secondAttribute="leading" constant="30" id="1sB-fd-Hwg"/>
+                        <constraint firstAttribute="bottom" secondItem="jTm-eo-fta" secondAttribute="bottom" constant="2" id="2aW-2t-0hp"/>
+                        <constraint firstAttribute="trailing" secondItem="jTm-eo-fta" secondAttribute="trailing" constant="30" id="pT6-sV-li5"/>
+                    </constraints>
                 </view>
             </objects>
             <point key="canvasLocation" x="388" y="329"/>

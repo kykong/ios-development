@@ -29,6 +29,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet var slider: UISlider!
     
     var showFiltered: Bool = false
+    var currentFilter: FilterType?
     
     
     // Filters
@@ -164,11 +165,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         slider.maximumValue = 1.0
         slider.value = 0.5
         
+        if let filter = currentFilter {
+            slider.minimumValue = Float(filter.intensityMinMax[0])
+            slider.maximumValue = Float(filter.intensityMinMax[1])
+            slider.value = Float(filter.intensity)
+        }
+        
         view.addSubview(sliderPanel)
         let bottomConstraint = sliderPanel.bottomAnchor.constraintEqualToAnchor(bottomMenu.topAnchor)
         let leftConstraint = sliderPanel.leftAnchor.constraintEqualToAnchor(view.leftAnchor)
         let rightConstraint = sliderPanel.rightAnchor.constraintEqualToAnchor(view.rightAnchor)
-        let heightConstraint = sliderPanel.heightAnchor.constraintEqualToConstant(44)
+        let heightConstraint = sliderPanel.heightAnchor.constraintEqualToConstant(46)
         
         NSLayoutConstraint.activateConstraints([bottomConstraint, leftConstraint, rightConstraint, heightConstraint])
         
@@ -236,6 +243,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func applyFilter(filter: FilterType) {
         activityIndicator.startAnimating()
+        currentFilter = filter
         let rgbaImage = RGBAImage(image: originalImage!)!
         
         let queue = NSOperationQueue()
@@ -301,6 +309,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
 
+    @IBAction func sliderValueUpdated(sender: UISlider) {
+        if let filter = currentFilter {
+            filter.setIntensity(Double(sender.value))
+            applyFilter(filter)
+        }
+        
+    }
 
     
     @IBAction func handleLongPress(sender: UILongPressGestureRecognizer) {

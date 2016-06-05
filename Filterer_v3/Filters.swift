@@ -13,6 +13,8 @@ public protocol FilterType: class {
     func applyFilter(image: RGBAImage)-> RGBAImage
     func setIntensity(intensity: Double)
     func reset()
+    var intensity: Double { get }
+    var intensityMinMax: [Double] { get }
 }
 
 public func clamp(minVal: Int, maxVal: Int, value: Int) -> Int {
@@ -26,11 +28,12 @@ public func clamp(minVal: Double, maxVal: Double, value: Double) -> Double {
 
 public class ColourIntensityFilter : FilterType {
     
-    var intensity: Double    // any number >= 0
+    public var intensity: Double    // any number >= 0
     var filteredImage: RGBAImage?
     
     let filterColour: Colour
     let DEFAULT_INTENSITY: Double = 4.0
+    public var intensityMinMax = [0.0, 10.0]
     
     public enum Colour {
         case Red, Green, Blue
@@ -114,7 +117,9 @@ public class ColourIntensityFilter : FilterType {
 
 
 public class SepiaFilter : FilterType {
-    var intensity: Double   // from 0 to 1
+    public var intensity: Double   // from 0 to 1
+    public var intensityMinMax = [0.0, 1.0]
+    
     var filteredImage: RGBAImage?
     
     let DEFAULT_INTENSITY: Double = 1.0
@@ -168,7 +173,9 @@ public class SepiaFilter : FilterType {
 
 
 public class ContrastFilter : FilterType {
-    var intensity: Double   // from -255 to 255
+    public var intensity: Double   // from -255 to 255
+    public var intensityMinMax = [-255.0, 255.0]
+
     var filteredImage: RGBAImage?
     
     let DEFAULT_INTENSITY: Double = 64.0
